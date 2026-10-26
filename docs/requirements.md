@@ -46,6 +46,10 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | NFR-13 | 0 CRITICAL prieš publikavimą | Trivy JSON sutampa su image ID; `scan-report --gate`, CI exit-code1; HIGH radiniams peržiūra ir sprendimas |
 | NFR-14 | CPU/ONNX/GPU servisai ne root | `docker exec ... id`, UID !=0; HTTP/Docker health; GPU papildomai tikras CUDA skaičiavimas |
 
+**GHCR vaizdai:**
+- `ghcr.io/lumiflarez/week3-cpu:v1.2.3-cpu@sha256:a9fe8668a46c95d98b16e8ff60ce3e47e12532061357ffe99bcfa4ebab430682` 
+- `ghcr.io/lumiflarez/week3-onnx:v1.2.3-cpu@sha256:84d7fe59f2e34bd122b34fd50e262e6ad6d42f09a4140828f446992a50bc797e`
+
 ## 10.x Agentinis elgesys (v1.9)
 
 | ID     | Reikalavimas              | KPI                         |
