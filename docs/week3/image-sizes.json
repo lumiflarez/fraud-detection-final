@@ -1,0 +1,33 @@
+{
+  "images": [
+    {
+      "image": "mlops-single:local",
+      "id": "sha256:90d939d28199f32815bcb14c433bd3e4d8c62862763f625abe0663819202d91c",
+      "platform": "linux/amd64",
+      "docker_size_bytes": 487430424,
+      "docker_size_MB": 487.43,
+      "rootfs_bytes": 480631210,
+      "rootfs_MB": 480.63
+    },
+    {
+      "image": "mlops-cpu:local",
+      "id": "sha256:84b083e49dd3fe18a7311edfe3f7cbac76b25a69d1231cbf67dc889e63a966df",
+      "platform": "linux/amd64",
+      "docker_size_bytes": 386721394,
+      "docker_size_MB": 386.72,
+      "rootfs_bytes": 379922216,
+      "rootfs_MB": 379.92
+    },
+    {
+      "image": "mlops-onnx:local",
+      "id": "sha256:9aa96952f31490c1d39de378f63fb0c2b80fc0492ead0069b4b47f469d2d1074",
+      "platform": "linux/amd64",
+      "docker_size_bytes": 254646984,
+      "docker_size_MB": 254.65,
+      "rootfs_bytes": 247847770,
+      "rootfs_MB": 247.85
+    }
+  ],
+  "definition": "rootfs: du -sx --apparent-size --block-size=1 /; Docker .Size accounting depends on image store",
+  "checked_at_utc": "2026-10-26T19:30:37.900128+00:00"
+}

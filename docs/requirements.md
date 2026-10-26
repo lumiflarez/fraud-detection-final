@@ -1,4 +1,4 @@
-# Fraud Detection API - Reikalavimai v1.1
+# Fraud Detection API - Reikalavimai v1.2
 
 Data: 2026-09-15 | Autoriai: Saule
 
@@ -35,7 +35,7 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | NFR-09 | Atsekamumas      | Kiekvienas eksperimentas turi MLflow run ID, git commit ir duomenų md5 tag'us; kiekvienas diegiamas modelis – `model_id` | 100 % run'ų |
 | NFR-10 | Duomenų versija  | Mokymo duomenų versija fiksuota DVC (`dvc.lock` md5 = run'o `dvc_raw_md5`) | 100 % run'ų |
 
-## 3.x Konteinerizacijos NFR (v1.2)
+## 3.2 Konteinerizacijos NFR (v1.2)
 
 Šiame demonstraciniame darbe dydžio/laiko tikslai vertinami pagal realius matavimus. Neįvykdytas tikslas registruojamas su priežastimi, o ne pakeičiamas fiktyviu rezultatu.
 
@@ -114,3 +114,4 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | Versija | Data       | Autorius | Pakeitimai |
 |---------|------------|----------|------------|
 | 1.1 | 2026-10-26 | Saule | MLflow + DVC pipeline, NFR-08..10 |
+| 1.2 | 2026-10-26 | Saule | Docker cpu/onnx vaizdai, Trivy + SBOM, NFR-11..14 išmatuoti |

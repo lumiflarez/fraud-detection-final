@@ -1,0 +1,12 @@
+{
+  "image": "mlops-onnx:local",
+  "container": "week3-onnx",
+  "image_id": "sha256:9aa96952f31490c1d39de378f63fb0c2b80fc0492ead0069b4b47f469d2d1074",
+  "url": "http://127.0.0.1:18081",
+  "uid": 1000,
+  "health": "healthy",
+  "http_ready_seconds": 3.112,
+  "cold_start_definition": "docker run invocation to first HTTP 200 /health; image already local",
+  "http_ready_within_5s": true,
+  "checked_at_utc": "2026-10-26T19:22:43.875563+00:00"
+}
