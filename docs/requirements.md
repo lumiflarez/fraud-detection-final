@@ -1,6 +1,6 @@
-# Fraud Detection API - Reikalavimai v1.0
+# Fraud Detection API - Reikalavimai v1.1
 
-Data: 2026-09-15 | Autoriai: (komanda)
+Data: 2026-09-15 | Autoriai: Saule
 
 ## 1.1 Problemos aprasymas
 
@@ -27,7 +27,7 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | NFR-06 | Kastai     | Inference kaina        | <= $0.0002/req        |
 | NFR-07 | Prieinamumas | Uptime               | >= 99.95%              |
 
-## 3.x Eksperimentų sekimo ir atkartojamumo NFR (v1.1)
+## 3.1 Eksperimentų sekimo ir atkartojamumo NFR (v1.1)
 
 | ID     | Kategorija       | Reikalavimas                                                    | KPI                                   |
 |--------|------------------|-----------------------------------------------------------------|---------------------------------------|
@@ -113,13 +113,4 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 
 | Versija | Data       | Autorius | Pakeitimai |
 |---------|------------|----------|------------|
-| 1.0     | 2026-09-15 | komanda  | Pradinis dokumentas |
-| 1.1     | 2026-09-09 | komanda  | MLflow + DVC pipeline, atkartojamumo NFR (NFR-08–NFR-10) |
-| 1.2     | 2026-09-16 | kurso pavyzdys | Patikrinta Docker laboratorija, NFR-11–NFR-14, matavimai ir saugumo vartas |
-| 1.9     | 2026-11-24 | komanda  | Self-healing LangGraph agentas (NFR-38–NFR-41) |
-| 1.10    | 2026-12-01 | komanda  | Observability stack (NFR-42–NFR-45) |
-| 1.11    | 2026-12-08 | komanda  | Scaling, spot, TCO (NFR-46–NFR-49) |
-| 1.12    | 2026-12-15 | komanda  | Security hardening (NFR-50–NFR-53) |
-| 1.13    | 2026-12-22 | komanda  | Edge ONNX + Flower FL (NFR-54–NFR-57) |
-| 1.14    | 2026-12-29 | komanda  | Testing suite + traceability (NFR-58–NFR-61) |
-| 1.15    | 2026-01-05 | komanda  | Governance package + capstone (NFR-62–NFR-65) |
+| 1.1 | 2026-10-26 | Saule | MLflow + DVC pipeline, NFR-08..10 |
