@@ -1,4 +1,4 @@
-# Fraud Detection API - Reikalavimai v1.2
+# Fraud Detection API - Reikalavimai v1.3
 
 Data: 2026-09-15 | Autoriai: Saule
 
@@ -49,6 +49,15 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 **GHCR vaizdai:**
 - `ghcr.io/lumiflarez/week3-cpu:v1.2.3-cpu@sha256:a9fe8668a46c95d98b16e8ff60ce3e47e12532061357ffe99bcfa4ebab430682` 
 - `ghcr.io/lumiflarez/week3-onnx:v1.2.3-cpu@sha256:84d7fe59f2e34bd122b34fd50e262e6ad6d42f09a4140828f446992a50bc797e`
+
+## 3.3 Debesijos NFR (v1.3)
+
+| ID     | Reikalavimas            | KPI                          | Išmatuota / įrodymas |
+|--------|-------------------------|------------------------------|----------------------|
+| NFR-15 | Mėnesio infra kaina     | <= 50 USD (GCP kreditai)     | Billing ataskaita: <X> USD; žr. `docs/cost-analysis.md` |
+| NFR-16 | Kaina vienai užklausai  | <= 0.0002 USD                | ~0.000003 USD (skaičiavimas `docs/cost-analysis.md`) |
+| NFR-17 | Valdomo endpoint SLA    | Uptime >= 99.9 %             | Cloud Run SLA (Google); gyvas `/health` → `{"status":"ok"}` |
+| NFR-18 | IaC atkartojamumas      | `terraform apply` < 15 min   | Pilnas apply: <Y> min (6 resursai) |
 
 ## 10.x Agentinis elgesys (v1.9)
 
@@ -119,3 +128,4 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 |---------|------------|----------|------------|
 | 1.1 | 2026-10-26 | Saule | MLflow + DVC pipeline, NFR-08..10 |
 | 1.2 | 2026-10-26 | Saule | Docker cpu/onnx vaizdai, Trivy + SBOM, NFR-11..14 išmatuoti |
+| 1.3 | 2026-10-28 | Saule | GCP Terraform, Cloud Run, cost analysis, NFR-15..18 |

@@ -25,4 +25,8 @@
 
 ## Decision
 
-We chose Cloud Run because: _(team rationale)_
+Pasirinkome Cloud Run, nes:
+- HTTPS endpoint su TLS ir autoscaling gautas per ~1–2 min. `terraform apply`, be serverio, sertifikatų ar firewall konfigūravimo;
+- `min_instances = 0` (scale-to-zero): be srauto mokame ~0 — laboratorijos apkrovai išlaidos realiai ~0 USD/mėn.;
+- OS patching, TLS atnaujinimai ir mastelio didinimas — Google atsakomybė.
+Kompromisas: mažiau kontrolės (nėra GPU, custom operatorių) — tokiems poreikiams tiktų GKE (5 savaitė).
