@@ -3,11 +3,18 @@ kind: InferenceService
 metadata:
   name: fraud-detector
   namespace: mlops
+  labels:
+    mlflow.registry/model: fraud-detector     # which registry entry this image serves
+    mlflow.registry/version: "1"              # fraud-detector v1 = run 4f3c6a6f (experiment 4)
+  annotations:
+    autoscaling.kserve.io/target: "70"        # HPA: CPU utilization target (%)
 spec:
   predictor:
+    minReplicas: 1
+    maxReplicas: 2
     containers:
       - name: kserve-container
-        image: ghcr.io/<org>/mlops-onnx:v1.2.0
+        image: mlops-onnx:v1.2.3-cpu           # week-3 ONNX image, loaded into minikube (GHCR week3-onnx is private)
         env:
           - name: MODEL_PATH
             value: /app/models/model.onnx

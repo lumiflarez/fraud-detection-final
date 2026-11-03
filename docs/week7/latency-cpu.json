@@ -1,0 +1,9 @@
+{
+  "url": "http://localhost:8080",
+  "requests": 100,
+  "warmup": 10,
+  "p50_ms": 6.18,
+  "p95_ms": 7.37,
+  "max_ms": 9.49,
+  "note": "sequential requests through kubectl port-forward; includes tunnel overhead"
+}

@@ -1,4 +1,4 @@
-# Fraud Detection API - Reikalavimai v1.5
+# Fraud Detection API - Reikalavimai v1.6
 
 Data: 2026-09-15 | Autoriai: Saule
 
@@ -90,6 +90,17 @@ Aplinka: GitHub Actions (`ubuntu-latest`), GHCR, ArgoCD v3.5.7 minikube klastery
 | NFR-25 | Modelio vartai            | accuracy >= 0.95 produkcijai        | PASS CI (bootstrap modelis); lokaliai DVC modelis 0.99 (eksperimentas 4) |
 | NFR-26 | Deploy tik po testų       | 100 % nepraėjusių paleidimų blokuoja | run 41655721898: lint fail → test/gate/build-push skipped; `needs:` grandinė |
 
+## 3.6 Model serving NFR (v1.6)
+
+Aplinka: MLflow 3.15.2 registry (lokalus serveris), KServe v0.12.0 RawDeployment minikube klasteryje; matavimai `docs/benchmark-report.md`, `docs/week7/*.json`.
+
+| ID     | Reikalavimas              | KPI                               | Išmatuota / įrodymas |
+|--------|---------------------------|-----------------------------------|----------------------|
+| NFR-27 | Fraud API p95 vėlinimas   | <= 80 ms (KServe ONNX)            | 2,53 ms p95 (100 užklausų, per port-forward); CPU sklearn Deployment 7,37 ms |
+| NFR-28 | LLM pralaidumas           | >= 150 tok/s (7B AWQ, HPC)        | Neišmatuota — nėra GPU/HPC |
+| NFR-29 | Kaina / 1K tokenų         | <= 0.002 USD                      | Neišmatuota — ta pati priežastis |
+| NFR-30 | Registry promocija        | candidate -> champion su patvirtinimu | `fraud-detector` v1, alias'ai `@candidate`, `@champion` (vietoj deprecated stadijų); InferenceService label `mlflow.registry/version=1` |
+
 ## 10.x Agentinis elgesys (v1.9)
 
 | ID     | Reikalavimas              | KPI                         |
@@ -162,3 +173,4 @@ Aplinka: GitHub Actions (`ubuntu-latest`), GHCR, ArgoCD v3.5.7 minikube klastery
 | 1.3 | 2026-10-28 | Saule | GCP Terraform, Cloud Run, cost analysis, NFR-15..18 |
 | 1.4 | 2026-11-03 | Saule | Kubernetes (minikube) inference Deployment + Service + ResourceQuota, NFR-19..22; GPU DDP neatlikta (HPC) |
 | 1.5 | 2026-11-03 | Saule | GitHub Actions CI (lint/test/gate/build-push), GHCR sha tag, ArgoCD GitOps, rollback procedūra, NFR-23..26 |
+| 1.6 | 2026-11-03 | Saule | MLflow Registry (alias'ai), KServe ONNX RawDeployment, p95 matavimai, NFR-27..30; vLLM neatlikta |
