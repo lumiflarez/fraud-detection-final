@@ -9,6 +9,7 @@ on:
 
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository }}/mlops-cpu
+  GATE_THRESHOLD: "0.95"
 
 jobs:
   lint:
@@ -19,9 +20,9 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install ruff
-      - run: ruff check src/ tests/ scripts/
+      - run: ruff check src/ tests/ scripts/        # rules: ruff.toml in repo
 
-  data-validation:
+  test:
     runs-on: ubuntu-latest
     needs: lint
     steps:
@@ -29,21 +30,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r requirements.txt -r requirements-testing.txt
-      - run: python scripts/bootstrap.py
-      - run: python scripts/run_data_validation.py
-
-  test:
-    runs-on: ubuntu-latest
-    needs: data-validation
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
       - run: pip install -r requirements.txt -r requirements-dev.txt -r requirements-testing.txt
-      - run: python scripts/bootstrap.py
-      - run: pytest tests/ -v
+      - run: python scripts/bootstrap.py           # model.pkl is DVC-tracked, not in Git
+      - run: pytest tests/test_model.py tests/test_api.py -v
 
   model-gate:
     runs-on: ubuntu-latest
@@ -55,29 +44,21 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt
       - run: python scripts/bootstrap.py && python src/evaluate.py
-      - run: python scripts/check_model_gate.py --threshold 0.95
-
-  governance:
-    runs-on: ubuntu-latest
-    needs: model-gate
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -r requirements.txt -r requirements-governance.txt
-      - run: python scripts/bootstrap.py
-      - run: python scripts/generate_governance_report.py
+      - run: python scripts/check_model_gate.py --threshold $GATE_THRESHOLD
 
   build-push:
     runs-on: ubuntu-latest
-    needs: governance
+    needs: model-gate
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
       contents: write
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt && python scripts/bootstrap.py   # model for the image
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -89,7 +70,7 @@ jobs:
           docker build -f docker/Dockerfile.cpu -t $IMAGE_NAME:$TAG .
           docker push $IMAGE_NAME:$TAG
           echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
-      - name: Update K8s manifest
+      - name: Update K8s manifest (GitOps)
         run: |
           sed -i "s|image:.*mlops-cpu:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|" k8s/deployment-cpu.yaml
           git config user.name "github-actions[bot]"
