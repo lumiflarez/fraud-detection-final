@@ -1,5 +1,8 @@
 """Latency benchmark for the fraud API: N sequential /predict requests, p50/p95 in ms."""
-import argparse, json, statistics, time
+import argparse
+import json
+import statistics
+import time
 import httpx
 
 ROW = {f"f{i}": v for i, v in enumerate([0.1, -0.2, 0.3, 0.0, 0.1, 0.2, 0.0, 0.1, 0.2, 0.0])}
