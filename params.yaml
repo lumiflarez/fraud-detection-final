@@ -1,4 +1,4 @@
 train:
   n_estimators: 300
-  max_depth: 2
+  max_depth: 10
   random_seed: 42
