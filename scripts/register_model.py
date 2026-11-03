@@ -1,4 +1,4 @@
-"""Register fraud model in MLflow Model Registry and promote to Production."""
+"""Register fraud model in MLflow Model Registry and set @candidate/@champion aliases."""
 import argparse
 import os
 
@@ -47,11 +47,12 @@ def main() -> None:
     if args.skip_promote:
         return
 
+    # MLflow 3: aliases instead of deprecated stages (U2-R2: models:/<name>@champion)
     client = MlflowClient()
-    client.transition_model_version_stage(MODEL_NAME, version, "Staging")
-    print(f"Promoted v{version} to Staging")
-    client.transition_model_version_stage(MODEL_NAME, version, "Production")
-    print(f"Promoted v{version} to Production")
+    client.set_registered_model_alias(MODEL_NAME, "candidate", version)
+    print(f"Alias @candidate -> v{version}")
+    client.set_registered_model_alias(MODEL_NAME, "champion", version)
+    print(f"Alias @champion -> v{version}")
 
 
 if __name__ == "__main__":
