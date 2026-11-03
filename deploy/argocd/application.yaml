@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/<org>/mlops-fraud-detection.git
+    repoURL: https://github.com/lumiflarez/fraud-detection-final.git
     targetRevision: main
-    path: k8s
+    path: deploy/overlays/production
   destination:
     server: https://kubernetes.default.svc
     namespace: mlops

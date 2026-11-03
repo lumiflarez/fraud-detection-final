@@ -1,4 +1,4 @@
-# Fraud Detection API - Reikalavimai v1.4
+# Fraud Detection API - Reikalavimai v1.5
 
 Data: 2026-09-15 | Autoriai: Saule
 
@@ -79,6 +79,17 @@ Matavimų aplinka: minikube v1.39.0 (K8s v1.37.0, Docker driver'is, 4 CPU / 6 Gi
 | NFR-21 | GPU utilizacija mokant    | >= 70 % vidurkis               | Neišmatuota — ta pati priežastis |
 | NFR-22 | Inference HA              | >= 2 replikos, rolling update  | 2 replikos Running; rolling update be prastovos (Service atsakė `/health` iš klasterio vidaus per keitimą); Pod'as 131 Mi / 4–5 m CPU ramybėje (requests 256Mi/250m); ResourceQuota `pods 2/10`, `requests.cpu 500m/4` |
 
+## 3.5 CI/CD NFR (v1.5)
+
+Aplinka: GitHub Actions (`ubuntu-latest`), GHCR, ArgoCD v3.5.7 minikube klasteryje; detalės `docs/cicd.md`.
+
+| ID     | Reikalavimas              | KPI                                 | Išmatuota / įrodymas |
+|--------|---------------------------|-------------------------------------|----------------------|
+| NFR-23 | Modelio rollback laikas   | <= 5 min                            | Procedūra `docs/cicd.md` (git revert → ArgoCD auto-sync <= 3 min); laikas nematuotas |
+| NFR-24 | CI pipeline trukmė        | <= 15 min (main)                    | 4 min 16 s pilnas paleidimas (run 41680554103) |
+| NFR-25 | Modelio vartai            | accuracy >= 0.95 produkcijai        | PASS CI (bootstrap modelis); lokaliai DVC modelis 0.99 (eksperimentas 4) |
+| NFR-26 | Deploy tik po testų       | 100 % nepraėjusių paleidimų blokuoja | run 41655721898: lint fail → test/gate/build-push skipped; `needs:` grandinė |
+
 ## 10.x Agentinis elgesys (v1.9)
 
 | ID     | Reikalavimas              | KPI                         |
@@ -150,3 +161,4 @@ Matavimų aplinka: minikube v1.39.0 (K8s v1.37.0, Docker driver'is, 4 CPU / 6 Gi
 | 1.2 | 2026-10-26 | Saule | Docker cpu/onnx vaizdai, Trivy + SBOM, NFR-11..14 išmatuoti |
 | 1.3 | 2026-10-28 | Saule | GCP Terraform, Cloud Run, cost analysis, NFR-15..18 |
 | 1.4 | 2026-11-03 | Saule | Kubernetes (minikube) inference Deployment + Service + ResourceQuota, NFR-19..22; GPU DDP neatlikta (HPC) |
+| 1.5 | 2026-11-03 | Saule | GitHub Actions CI (lint/test/gate/build-push), GHCR sha tag, ArgoCD GitOps, rollback procedūra, NFR-23..26 |
