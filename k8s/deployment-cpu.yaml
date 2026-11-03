@@ -20,7 +20,7 @@ spec:
       containers:
         - name: api
           # Replace with your Artifact Registry or local image
-          image: ghcr.io/lumiflarez/fraud-detection-final/mlops-cpu:sha-0ac5a1e7d94588fedfc1fea05c43a501ab08f08b
+          image: ghcr.io/lumiflarez/fraud-detection-final/mlops-cpu:sha-28329986f0ccd04bddfce5168d99c9bc17b6b27b
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsNonRoot: true
