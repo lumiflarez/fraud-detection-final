@@ -1,0 +1,9 @@
+# Week 6: explicit lint rules so laptop and CI agree regardless of ruff version.
+# F = pyflakes (unused imports/variables, undefined names), E4/E7/E9 = pycodestyle errors.
+# Stricter rule sets (I, UP, PL, BLE) can be enabled in later weeks together with the code they affect.
+target-version = "py310"
+
+[lint]
+select = ["E4", "E7", "E9", "F"]
+# E402: scripts/ and src/serve*.py deliberately import repo packages after sys.path.insert(0, ROOT).
+ignore = ["E402"]
