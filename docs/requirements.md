@@ -1,4 +1,4 @@
-# Fraud Detection API - Reikalavimai v1.3
+# Fraud Detection API - Reikalavimai v1.4
 
 Data: 2026-09-15 | Autoriai: Saule
 
@@ -46,6 +46,15 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | NFR-13 | 0 CRITICAL prieš publikavimą | Trivy JSON sutampa su image ID; `scan-report --gate`, CI exit-code1; HIGH radiniams peržiūra ir sprendimas |
 | NFR-14 | CPU/ONNX/GPU servisai ne root | `docker exec ... id`, UID !=0; HTTP/Docker health; GPU papildomai tikras CUDA skaičiavimas |
 
+**Išmatuota (2026-10-26, linux/amd64, Docker Desktop 27.5.1; šaltiniai `docs/image-sizes.md`, `docs/week3/*.json`, `docs/security-scan.md`):**
+
+| NFR | Tikslas | Išmatuota | Rezultatas |
+|-----|---------|-----------|------------|
+| NFR-11 | CPU rootfs <= 500 MB; ONNX <= 300 MB | rootfs: single 480,63 MB, cpu 379,92 MB, onnx 247,85 MB (`docs/week3/image-sizes.json`) | atitinka |
+| NFR-12 | ONNX parengtis <= 5 s | 3,112 s nuo `docker run` iki pirmo HTTP 200 `/health`, vaizdas vietinis (`docs/week3/onnx-runtime.json`) | atitinka (vienas matavimas, ne SLA) |
+| NFR-13 | 0 CRITICAL prieš publikavimą | cpu/onnx: 0 CRITICAL, 44 HIGH = 8 skirtingi CVE, visi Debian bazinio vaizdo OS paketuose, be pataisos (`docs/week3/trivy-*.json`, analizė `docs/security-scan.md`); vartas PASS | atitinka; HIGH priimti su pagrindimu |
+| NFR-14 | API vartotojas ne root | UID 1000 (`mluser`) cpu ir onnx (`docs/week3/cpu-runtime.json`, `onnx-runtime.json`); GPU vaizdas nedarytas | atitinka |
+
 **GHCR vaizdai:**
 - `ghcr.io/lumiflarez/week3-cpu:v1.2.3-cpu@sha256:a9fe8668a46c95d98b16e8ff60ce3e47e12532061357ffe99bcfa4ebab430682` 
 - `ghcr.io/lumiflarez/week3-onnx:v1.2.3-cpu@sha256:84d7fe59f2e34bd122b34fd50e262e6ad6d42f09a4140828f446992a50bc797e`
@@ -58,6 +67,17 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | NFR-16 | Kaina vienai užklausai  | <= 0.0002 USD                | ~0.000003 USD (skaičiavimas `docs/cost-analysis.md`) |
 | NFR-17 | Valdomo endpoint SLA    | Uptime >= 99.9 %             | Cloud Run SLA (Google); gyvas `/health` → `{"status":"ok"}` |
 | NFR-18 | IaC atkartojamumas      | `terraform apply` < 15 min   | Pilnas apply: <Y> min (6 resursai) |
+
+## 3.4 Kubernetes NFR (v1.4)
+
+Matavimų aplinka: minikube v1.39.0 (K8s v1.37.0, Docker driver'is, 4 CPU / 6 GiB cap), vaizdas `mlops-cpu:v1.2.3-cpu` (= GHCR `week3-cpu@sha256:a9fe8668…`), 2026-11-03. Komandos ir pilni matavimai — `docs/k8s-setup.md`. GPU DDP Job neatliktas (nėra HPC prieigos); pagal užduoties taisykles GPU dalis neprivaloma.
+
+| ID     | Reikalavimas              | KPI                            | Išmatuota / įrodymas |
+|--------|---------------------------|--------------------------------|----------------------|
+| NFR-19 | Deployment rollout laikas | <= 60 s (2 replikos)           | 25,1 s: `kubectl rollout restart` → 2/2 Ready (`time kubectl rollout status`); vaizdas jau mazge (`minikube image load` 33,4 s atskirai) |
+| NFR-20 | GPU mokymo Job trukmė     | <= 30 min (2 GPU, sample)      | Neišmatuota — HPC neprieinamas, Job nepaleistas; manifestai `k8s/job-training-*.yaml`, `src/train_ddp.py` repozitorijoje |
+| NFR-21 | GPU utilizacija mokant    | >= 70 % vidurkis               | Neišmatuota — ta pati priežastis |
+| NFR-22 | Inference HA              | >= 2 replikos, rolling update  | 2 replikos Running; rolling update be prastovos (Service atsakė `/health` iš klasterio vidaus per keitimą); Pod'as 131 Mi / 4–5 m CPU ramybėje (requests 256Mi/250m); ResourceQuota `pods 2/10`, `requests.cpu 500m/4` |
 
 ## 10.x Agentinis elgesys (v1.9)
 
@@ -129,3 +149,4 @@ Tikslas: recall >= 0.92, false positive <= 0.5%.
 | 1.1 | 2026-10-26 | Saule | MLflow + DVC pipeline, NFR-08..10 |
 | 1.2 | 2026-10-26 | Saule | Docker cpu/onnx vaizdai, Trivy + SBOM, NFR-11..14 išmatuoti |
 | 1.3 | 2026-10-28 | Saule | GCP Terraform, Cloud Run, cost analysis, NFR-15..18 |
+| 1.4 | 2026-11-03 | Saule | Kubernetes (minikube) inference Deployment + Service + ResourceQuota, NFR-19..22; GPU DDP neatlikta (HPC) |
